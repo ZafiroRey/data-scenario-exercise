@@ -121,6 +121,89 @@ Agent tools or workflows
 Automation
 Escalation procedures
 ---------
+5. Testing a theory
+Theory
+My initial theory would be:
+The Billing CSAT decline may be driven by an increase in reopened tickets, indicating that customers are not receiving a complete resolution during the first interaction.
+This would be especially relevant if the increase in reopens is concentrated in a specific Billing issue type.
+I would test whether Billing tickets that are reopened have lower CSAT than tickets that are resolved without reopening.
+SELECT
+    category,
+    reopened,
+    COUNT(*) AS total_tickets,
+    AVG(csat_score) AS avg_csat,
+    AVG(first_response_minutes) AS avg_first_response_minutes
+FROM tickets
+WHERE category = 'Billing'
+  AND closed_at >= CURRENT_DATE - INTERVAL '30 days'
+  AND csat_score IS NOT NULL
+GROUP BY
+    category,
+    reopened
+ORDER BY
+    reopened;
+What I would look for
+I would compare the CSAT of reopened versus non-reopened Billing tickets.
+If reopened tickets show materially lower CSAT, that would support the theory that resolution quality or first-contact resolution is contributing to the decline.
+I would then drill further into the issue type to identify whether one specific Billing reason is responsible for most of the reopens.
+I would also compare the result against the previous 30-day period to determine whether the pattern is actually new and whether it correlates with the timing of the CSAT decline.
+6. What I'd actually do
+If the analysis showed that Billing reopens had increased significantly and that most of those reopens were related to refund timing questions, I would treat this as a process and customer-experience opportunity rather than simply an agent performance problem.
+During the next week, I would take four actions:
+1. Validate the root cause
+I would review a sample of reopened refund-related tickets, including both the original interaction and the subsequent contact.
+I would look for common patterns:
+Was the refund process explained correctly?
+Was the expected timeline clearly communicated?
+Did agents have the correct information?
+Was the customer given a realistic expectation?
+Was there a gap in the knowledge base or macro?
+Was the customer contacting us again because the original response was technically correct but unclear?
+This would help distinguish between a knowledge gap, communication gap, process issue, or actual system/process delay.
+2. Communicate the finding to the team
+I would share the trend with the team without immediately framing it as an individual performance issue.
+For example:
+“We identified that a significant portion of our Billing reopens are related to refund timing questions, and these contacts are contributing to the lower CSAT we're seeing. This week, let's focus on setting clear expectations around refund timelines and making sure customers understand what happens next. I'll share the updated guidance and examples so we're consistent in how we handle these contacts.”
+I would reinforce that the objective is consistent resolution and a better customer experience, not simply reducing the reopen metric.
+3. Improve the macro/process
+If the investigation confirmed that customers were reopening because the refund timeline was unclear, I would update the relevant macro or knowledge-base guidance.
+For example, I would make sure the response clearly explains:
+What happened → expected refund timeline → what the customer should expect next → when they should contact us again → what we can do if the timeline is exceeded.
+I would also make the language customer-friendly rather than simply copying internal policy terminology.
+If the process itself is causing the issue—for example, refunds are consistently taking longer than the timeframe communicated to customers—I would escalate that finding to the appropriate partner team rather than expecting agents to solve a process problem through better wording.
+4. Measure whether the intervention worked
+I would establish a baseline from the previous period and monitor the next 1–2 weeks.
+I would specifically track:
+Billing CSAT
+Reopen rate
+Refund-related reopen rate
+CSAT for refund-related contacts
+QA scores for refund interactions
+First-contact resolution, if available
+CSAT comments
+I would consider the intervention successful if refund-related reopens decrease without negatively impacting other metrics, while Billing CSAT begins to recover.
+I would also review a sample of interactions to make sure the improvement is sustainable and not simply the result of agents changing how tickets are categorized.
+7. Reporting up and coaching down
+The two conversations would be very different because they have different purposes.
+Update to my manager — two sentences
+“Our initial analysis indicates that the Billing CSAT decline is closely associated with an increase in reopened tickets, particularly around refund timing questions, which suggests a potential resolution and expectation-setting issue rather than a staffing or volume problem. I’m going to validate the ticket patterns, align the team on consistent refund communication, update the relevant guidance if needed, and track reopen rate and CSAT over the next two weeks to measure the impact.”
+The message to my manager is concise, data-driven, focused on business impact, root cause, and action.
+Coaching conversation with the agent
+My 1:1 conversation would be much more individual and developmental.
+I would not approach the agent by saying:
+“Your reopen rate is too high.”
+Instead, I would use specific examples and ask questions first:
+“I noticed that some of your reopened Billing contacts are related to refund timing. I'd like to look at a couple of these interactions with you. Walk me through how you approached this customer and what information you felt they needed from us.”
+Then I would explore whether there was a knowledge, process, or communication gap.
+If the issue was expectation setting, I might coach:
+“The information you're providing is correct, but I think we can make the customer's next steps clearer. Let's try explaining the expected timeline, what they should expect next, and exactly when they should come back to us if the refund hasn't arrived.”
+I would then agree on a specific behavior to practice and follow up on it.
+The key difference
+Manager conversation:
+What happened → business impact → root cause → action → measurement.
+Agent coaching:
+What happened → understand their perspective → specific behavior → practice → support → follow-up.
+My goal would be to avoid turning an operational metric into a blame exercise. A good leader should be able to report the problem objectively upward while using the same data to develop people downward.
 Where I would start and why
 I would start with the CSAT trend by category because it establishes the scope of th problem.
 If Billing is the only category showing a significant decline, I would then drill down into Billing at the ticket and subcategory level, comparing the current month with the previous two months.
